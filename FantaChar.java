@@ -1,22 +1,22 @@
 import java.io.*;
 class FantaChar
 {
-		static char[] cadena;
+	//	static char[] cadena;
 	//
 	// ler arraichar
-		public static void LER() 
+		public static void LER( char[] cad ) 
 		{
-			cadena = new char[ 50 ]; // de 50 caracteres
+			// cadena = new char[ 50 ]; // de 50 caracteres
 			
 			int i = 0, 
 				car;
 
 			try {
-			System.out.print( cadena.length );
+//			System.out.println( cad.length );
 			System.out.print( "Introducir texto: " );
-			while ( ( car = System.in.read() ) != '\n' && i < cadena.length )
+			while ( ( car = System.in.read() ) != '\n' && i < cad.length )
 			{
-				cadena[i] = (char)car;
+				cad[i] = (char)car;
 				i++;
 			}
 			}
@@ -25,7 +25,7 @@ class FantaChar
 		}
 	//
 	// VER
-		public static void VER()
+		public static void VER( char[] cadena )
 		{
 			int i = 0;
 			while ( cadena[ i ] != '\0' ) 
@@ -36,7 +36,7 @@ class FantaChar
 		}
 	//
 	// BUSCAR
-		public static int BUSCAR( char caracter )
+		public static int BUSCAR( char[] cadena, char caracter )
 		{
 			int i = 0;
 			while ( cadena[ i ] != '\0' )
@@ -51,9 +51,9 @@ class FantaChar
 		}
 	//
 	// COMPARAR CADENAS. Devolverá true si hace match y false en cualquier otro caso.
-		private static boolean COMPARA_CHARS( int i, char[] cat2find )
+		private static boolean COMPARA_CHARS( int i, char[] cat2find, char[] cadena, int p )
 		{
-			int fin_cat = cat2find.length; // Longitud a comparar
+			int fin_cat = p; // Longitud a comparar
 
 			for ( int c = 0; c < fin_cat; c++ ) 
 			{
@@ -62,23 +62,28 @@ class FantaChar
 					return false;
 				}
 				System.out.println( cat2find[c] + " coincide con " + cadena[i] );
-			i++;
+				i++;
 			}
 
 			return true;
 		}
 	//
 	// BUSCAR_CAD
-		public static int BUSCAR_CAD( char[] cat2find )
+		public static int BUSCAR_CAD( char[] cat2find, char[] cadena )
 		{
 			int i = 0; 		// contador en la cadena principal
-
-			while ( cadena[ i ] != '\0')
+			int p = 0;		// longitud válida de la cadena a buscar
+			while ( cat2find[p] != '\0' )
+			{
+				p++;
+			}
+			System.out.println( "Longitud a de la cadena a buscar: " + p  );
+			while ( cadena[ i ] != '\0' )
 			{
 				if ( cadena[ i ] == cat2find[ 0 ] )
 				{
 					System.out.println("Encontrada coincidencia en el primer carácter...");
-					if ( COMPARA_CHARS( i, cat2find ) )
+					if ( COMPARA_CHARS( i, cat2find, cadena, p ) )
 					{
 						return i;
 					}
@@ -89,11 +94,13 @@ class FantaChar
 		}
 	
 	public static void main( String[] args )
-	{
-		LER();
-		VER();
-		System.out.println( "Se ha encontrado el carácter en posición: " + BUSCAR( 'a' ) );
-		char[] busqueda = {'c','a','r','a'};
-		System.out.println( "Se ha encontrado la cadena en posicion: " + BUSCAR_CAD( busqueda ) );
+	{	
+		char[] cadena = new char[50];
+		char[] busqueda = new char[50];
+		LER( cadena );
+		VER( cadena );
+		System.out.println( "Se ha encontrado el carácter en posición: " + BUSCAR( cadena, 'a' ) );
+		LER( busqueda );
+		System.out.println( "Se ha encontrado la cadena en posicion: " + BUSCAR_CAD( busqueda, cadena ) );
 	}
 }
