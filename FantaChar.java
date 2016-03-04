@@ -122,19 +122,64 @@ class FantaChar
 		{
 			// Posición inicial donde empezar a sustituir
 			int posicion = BUSCAR_CAD( cat2find, cadena ); 
-			int longitud = LONGITUD_DE_LA_CADENA( catSustituta );
-			if ( LONGITUD_DE_LA_CADENA( cat2find ) <= longitud )
+
+			int longitudSustituta = LONGITUD_DE_LA_CADENA( catSustituta );
+			int longitudcat2find = LONGITUD_DE_LA_CADENA( cat2find ); 
+			
+			int diferencia = longitudSustituta - longitudcat2find;
+
+			if ( diferencia == 0 ) // Las cadenas son del mismo tamaño.
 			{
-				for ( int i = 0; i < longitud; i++ )
+				for ( int i = 0; i < longitudSustituta; i++ )
 				{
 					cadena[ posicion ] = catSustituta[ i ];
 					posicion++;
 				}
 			}
-			else
+			else // Las cadenas con de distinto tamaño.
 			{
-				System.out.println( "La cadena a sustituir es más peque que la sustituta. No se hace nada." );
+				if ( DESPLAZA( cadena, posicion, diferencia, longitudcat2find ) ) // Solo entra si DESPLAZA() devuelve true
+				{
+					for ( int i = 0; i < longitudSustituta; i++ )
+					{
+						cadena[ posicion ] = catSustituta[ i ];
+						posicion++;
+					}
+				}
 			}
+		}
+
+		//
+		// DESPLAZA_CADENA
+		private static boolean DESPLAZA( char[] cadena, int inicioDesplazamiento, int desplazamiento, int long2Find )
+		{	
+			int lastChar = LONGITUD_DE_LA_CADENA( cadena );
+
+			if ( desplazamiento > 0 )
+			{
+				for ( int i = lastChar; i > inicioDesplazamiento; i-- )
+				{
+					cadena[ i + desplazamiento ] = cadena[ i ];
+				}
+				return true;
+			}	
+			else if ( desplazamiento < 0 )
+			{
+				int pi = inicioDesplazamiento + long2Find;
+				int pf = pi + desplazamiento;
+				for ( int i = pf; i < lastChar; i++ )
+				{
+					cadena[ i ] = cadena[ pi ];
+					pi++;
+				}
+	
+				for ( int i = lastChar - desplazamiento; i < long2Find; i++ )
+				{
+					cadena[ i ] = '\0';
+				}
+				return true;
+			}
+			return false;
 		}
 	
 	public static void main( String[] args )
@@ -142,16 +187,22 @@ class FantaChar
 		char[] cadena = new char[50];
 		char[] busqueda = new char[50];
 		char[] sustituta = new char[50];
+		
 		LER( cadena );
 		VER( cadena );
+		
 		System.out.println( "Se ha encontrado el carácter en posición: " + BUSCAR( cadena, 'a' ) );
+		
 		LER( busqueda );
 		System.out.println( "Se ha encontrado la cadena en posicion: " + BUSCAR_CAD( busqueda, cadena ) );
+		
 		System.out.println( "Cadena a sustituir? " );
 		LER( busqueda );
+		
 		System.out.println( "Cadena a sustituta? " );
 		LER( sustituta );
 		REMPLAZA( cadena, busqueda, sustituta );
+		
 		System.out.println( "Resultado: " );
 		VER( cadena );
 	} 
